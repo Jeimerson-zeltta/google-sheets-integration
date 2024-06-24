@@ -1,13 +1,17 @@
 const express = require('express');
 const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config(); // Carregar variáveis de ambiente do arquivo .env
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Carrega as credenciais do arquivo JSON
-const keys = JSON.parse(fs.readFileSync(path.join(__dirname, 'credentials.json')));
+// Carrega as credenciais das variáveis de ambiente
+const keys = {
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Substitui \\n por \n
+};
 
 // Criação do cliente de autenticação JWT
 const client = new google.auth.JWT(
